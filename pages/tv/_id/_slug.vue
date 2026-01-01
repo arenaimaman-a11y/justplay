@@ -90,6 +90,15 @@ export default {
                     name: 'description',
                     content: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
                 }
+            ],
+            // Skrip iklan
+            script: [
+                {
+                    hid: 'adsterra-native-tv',
+                    async: true,
+                    'data-cfasync': 'false',
+                    src: 'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
+                }
             ]
         }
     },
