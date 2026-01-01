@@ -177,6 +177,7 @@ export default {
   padding: 0; /* Menghilangkan padding yang mungkin menyebabkan jarak */
   background-color: transparent; /* Menghilangkan background putih */
   box-sizing: border-box; /* Mengatur box model untuk mencakup padding dan margin dengan benar */
+  border: none; /* Pastikan tidak ada border */
 }
 
 /* Gaya untuk setiap elemen iklan */
@@ -187,6 +188,7 @@ export default {
   padding: 0; /* Menghapus padding yang tidak perlu */
   margin-bottom: 10px; /* Memberikan jarak antar iklan */
   box-sizing: border-box; /* Mengatur ukuran kotak termasuk padding dan margin */
+  border: none; /* Pastikan tidak ada border di setiap item iklan */
 }
 
 /* Media Query untuk tampilan perangkat mobile */
@@ -200,7 +202,20 @@ export default {
     width: 100%; /* Setiap elemen iklan menggunakan lebar penuh pada perangkat mobile */
     margin-bottom: 10px; /* Jarak antar elemen di perangkat mobile */
     padding: 0; /* Hapus padding di perangkat mobile */
+    border: none; /* Pastikan tidak ada border di perangkat mobile */
   }
 }
+
+/* Menghilangkan margin dan padding pada elemen lain yang bisa mempengaruhi */
+body, .container {
+  margin: 0; /* Pastikan tidak ada margin yang mengganggu */
+  padding: 0; /* Hapus padding yang bisa menyebabkan garis */
+}
+
+/* Pastikan tidak ada border di body atau container */
+body, .container, .row {
+  border: none;
+}
 </style>
+
 
