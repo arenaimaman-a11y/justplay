@@ -1,63 +1,79 @@
 <template>
-    <div>
-        <Player :backdrop="backdrop" :title="item.title" :runtime="item.episode_run_time" />
+  <div>
+    <Player :backdrop="backdrop" :title="item.title" :runtime="item.episode_run_time" />
 
-        <div class="container box-info">
-            <div class="row justify-content-center">
-                <div class="col-lg-11">
-                    <div class="card">
-                        <div class="card-body pt-5 p-lg-4">
-                            <div class="row">
-                                <div class="col-lg-3 d-none d-lg-block">
-                                    <aside>
-                                        <img :src="poster(item.poster_path)" :alt="item.title" class="img-fluid rounded mb-4">
-                                        <div class="mb-3 d-flex justify-content-around">
-                                            <div v-for="(item, index) in votes" :key="index" style="color: #f1c830">
-                                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                                            </div>
-                                            <div v-for="(item, index) in unvotes" :key="'un'+index">
-                                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                                            </div>
-                                        </div>
-                                        
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td>{{ $t('Genres') }}</td>
-                                                    <td class="text-muted small"><span v-for="(it, index) in item.genres" :key="index">{{ it.name }}, </span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ $t('Runtime') }}</td>
-                                                    <td class="text-muted small">{{ this._.head(item.episode_run_time) }} min</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </aside>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
-                                        <div class="title">
-                                            <h1 class="text-light h3">{{ item.name }} <span class="text-muted fs-4">({{ year }})</span></h1>
-                                        </div>
-                                        <div class="dl mb-3 mb-md-0 text-center">
-                                            <ButtonDownload />
-                                        </div>
-                                    </div>
-                                    <p class="text-muted">{{ item.overview }}</p>
-
-                                    <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4"  />
-                                    <Episodes :tvId="$route.params.id" :seasonNumber="item.number_of_seasons" :episodeNumber="selectEpisode" />
-
-                                    <Casts :id="$route.params.id" :type="'tv'" class="mb-4"  />
-                                    <Recommendations :id="$route.params.id" :type="'tv'"  />
-                                </div>
-                            </div>
-                        </div>
+    <div class="container box-info">
+      <div class="row justify-content-center">
+        <div class="col-lg-11">
+          <div class="card">
+            <div class="card-body pt-5 p-lg-4">
+              <div class="row">
+                <div class="col-lg-3 d-none d-lg-block">
+                  <aside>
+                    <img :src="poster(item.poster_path)" :alt="item.title" class="img-fluid rounded mb-4" />
+                    <div class="mb-3 d-flex justify-content-around">
+                      <div v-for="(item, index) in votes" :key="index" style="color: #f1c830">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      </div>
+                      <div v-for="(item, index) in unvotes" :key="'un'+index">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      </div>
                     </div>
+
+                    <table class="table table-borderless">
+                      <tbody>
+                        <tr>
+                          <td>{{ $t('Genres') }}</td>
+                          <td class="text-muted small"><span v-for="(it, index) in item.genres" :key="index">{{ it.name }}, </span></td>
+                        </tr>
+                        <tr>
+                          <td>{{ $t('Runtime') }}</td>
+                          <td class="text-muted small">{{ this._.head(item.episode_run_time) }} min</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </aside>
                 </div>
+                <div class="col-lg-9">
+                  <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
+                    <div class="title">
+                      <h1 class="text-light h3">{{ item.name }} <span class="text-muted fs-4">({{ year }})</span></h1>
+                    </div>
+                    <div class="dl mb-3 mb-md-0 text-center">
+                      <ButtonDownload />
+                    </div>
+                  </div>
+                  <p class="text-muted">{{ item.overview }}</p>
+
+                  <!-- IKLAN NATIVE ADSTERRA -->
+                  <div class="my-4 text-center">
+                    <div class="ad-container">
+                      <div class="ad-item">
+                        <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
+                      </div>
+                      <div class="ad-item">
+                        <div id="container-cd1096097e3fd55fe2a731d9cf31759f"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4"  />
+                  <Episodes :tvId="$route.params.id" :seasonNumber="item.number_of_seasons" :episodeNumber="selectEpisode" />
+
+                  <Casts :id="$route.params.id" :type="'tv'" class="mb-4" />
+                  <Recommendations :id="$route.params.id" :type="'tv'" />
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -137,3 +153,36 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+/* Wrapper untuk iklan banner */
+.ad-container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Gaya untuk setiap elemen iklan */
+.ad-container .ad-item {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* Media Query untuk tampilan perangkat mobile */
+@media (max-width: 576px) {
+    .ad-container {
+        width: 100%;
+    }
+
+    .ad-container .ad-item {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+}
+</style>
