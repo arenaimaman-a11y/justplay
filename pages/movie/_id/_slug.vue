@@ -69,35 +69,7 @@
         </div>
     </div>
 </template>
-<style scoped>
-/* Wrapper untuk iklan */
-.ad-container {
-    display: flex;
-    flex-wrap: wrap;  /* Memungkinkan konten untuk membungkus di baris berikutnya */
-    gap: 10px; /* Jarak antar elemen iklan */
-    justify-content: center; /* Menyusun iklan agar berada di tengah */
-    width: 100%;
-}
 
-/* Gaya untuk setiap iklan */
-.ad-container .ad-item {
-    flex: 1 1 calc(50% - 10px); /* Membuat 2 kolom pada perangkat kecil */
-    max-width: 48%; /* Membatasi lebar maksimal setiap iklan */
-    box-sizing: border-box;
-}
-
-/* Media Query untuk ponsel */
-@media (max-width: 576px) {
-    .ad-container {
-        gap: 5px; /* Jarak antar kolom pada perangkat kecil */
-    }
-    
-    .ad-container .ad-item {
-        flex: 1 1 calc(50% - 5px); /* Dua kolom pada ponsel */
-        max-width: 48%; /* Menjaga lebar tetap di bawah 50% */
-    }
-}
-</style>
 
 <script>
 const mopie = require('~/mopie')
@@ -181,5 +153,44 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Wrapper untuk iklan banner */
+.ad-container {
+    display: flex;
+    justify-content: center; /* Menengahkan iklan */
+    align-items: center; /* Menjaga iklan di tengah secara vertikal */
+    flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
+    gap: 10px; /* Menambahkan jarak antar elemen */
+    width: 100%; /* Lebar penuh dari kontainer induk */
+    max-width: 600px; /* Lebar maksimum banner iklan */
+    margin: 0 auto; /* Menjaga iklan tetap di tengah */
+    padding: 10px; /* Menambah ruang di sekitar kontainer iklan */
+}
+
+/* Gaya untuk setiap elemen iklan */
+.ad-container .ad-item {
+    flex: 1 1 48%; /* Membuat dua kolom dengan sedikit jarak antar elemen */
+    max-width: 48%; /* Menjaga lebar iklan tidak lebih dari 48% */
+    box-sizing: border-box;
+    height: auto; /* Memastikan iklan tidak terlalu memanjang secara vertikal */
+}
+
+/* Media Query untuk tampilan perangkat mobile */
+@media (max-width: 576px) {
+    .ad-container {
+        flex-direction: column; /* Menata iklan menjadi satu kolom pada layar kecil */
+        gap: 15px; /* Jarak antar elemen lebih besar di ponsel */
+        max-width: 90%; /* Lebar kontainer lebih kecil di ponsel */
+        padding: 5px; /* Mengurangi padding untuk perangkat kecil */
+    }
+    
+    .ad-container .ad-item {
+        flex: 1 1 100%; /* Membuat iklan menggunakan lebar penuh pada ponsel */
+        max-width: 100%; /* Lebar maksimum iklan di ponsel */
+        height: auto; /* Menjaga tinggi otomatis di perangkat mobile */
+    }
+}
+</style>
 
 
