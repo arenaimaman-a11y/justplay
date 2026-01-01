@@ -44,6 +44,12 @@
                                         </div>
                                     </div>
                                     <p class="text-muted">{{ item.overview }}</p>
+                                    <!-- IKLAN NATIVE ADSTERRA -->
+                                    <div class="my-4 text-center">
+                                    <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
+                                    </div>
+
+
                                     <Casts :id="id" :type="'movie'" class="mb-4"  />
                                     <Recommendations :id="id" :type="'movie'" class="mb-4" />
                                     <Similars :id="id" :type="'movie'"  />
@@ -59,64 +65,83 @@
 
 <script>
 const mopie = require('~/mopie')
-export default {
-    name: 'movie-id-slug',
-    head() {
-        return {
-        title: this.item.title+ ' '+this.year+' - '+this.$i18n.t('Stream Free Movies & TV Shows'),
-        meta: [
-            {
-            hid: 'description',
-            name: 'description',
-            content: this.item.title+ ' '+this.year+' - '+this.$i18n.t('Stream Free Movies & TV Shows')
-            }
-        ]
-        }
-    },
-    async fetch() {
-        let params = {
-            api_key: mopie.API_KEY,
-            include_adult: false,
-            language: this.$i18n.locale,
-        }
 
-        this.item = await this.$axios.$get(`movie/${this.$route.params.id}`, {params: params})
-    },
-    data() {
-      return {
-        item: []
-      }
-    },
-    computed: {
-        id() {
-            return this.$route.params.id
-        },
-        backdrop() {
-            if (this.item) {
-                return mopie.IMAGE_BACKDROP+this.item.backdrop_path
-            }
-        },
-        poster() {
-            if (this.item) {
-                return mopie.IMAGE_POSTER+this.item.poster_path
-            }
-        },
-        year() {
-            if (this.item.release_date) {
-                return this.item.release_date.split('-')[0];
-            }
-        },
-        votes() {
-            if (this.item.vote_average) {
-                return Math.round(this.item.vote_average)
-            }
-        },
-        unvotes() {
-            if (this.votes) {
-                var unvote = 10 - this.votes
-                return [...Array(unvote).keys()];
-            }
+export default {
+  name: 'movie-id-slug',
+
+  head() {
+    return {
+      title:
+        this.item.title +
+        ' ' +
+        this.year +
+        ' - ' +
+        this.$i18n.t('Stream Free Movies & TV Shows'),
+
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            this.item.title +
+            ' ' +
+            this.year +
+            ' - ' +
+            this.$i18n.t('Stream Free Movies & TV Shows')
         }
+      ],
+
+      script: [
+        {
+          hid: 'adsterra-native-movie',
+          async: true,
+          'data-cfasync': 'false',
+          src:
+            'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
+        }
+      ]
     }
+  },
+
+  async fetch() {
+    const params = {
+      api_key: mopie.API_KEY,
+      include_adult: false,
+      language: this.$i18n.locale
+    }
+
+    this.item = await this.$axios.$get(
+      `movie/${this.$route.params.id}`,
+      { params }
+    )
+  },
+
+  data() {
+    return {
+      item: {}
+    }
+  },
+
+  computed: {
+    id() {
+      return this.$route.params.id
+    },
+    backdrop() {
+      return mopie.IMAGE_BACKDROP + this.item.backdrop_path
+    },
+    poster() {
+      return mopie.IMAGE_POSTER + this.item.poster_path
+    },
+    year() {
+      return this.item.release_date?.split('-')[0]
+    },
+    votes() {
+      return Math.round(this.item.vote_average || 0)
+    },
+    unvotes() {
+      return Array(10 - this.votes).fill(0)
+    }
+  }
 }
 </script>
+
