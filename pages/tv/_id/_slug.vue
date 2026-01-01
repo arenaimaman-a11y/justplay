@@ -49,19 +49,16 @@
                   </div>
                   <p class="text-muted">{{ item.overview }}</p>
 
-                  <!-- IKLAN NATIVE ADSTERRA -->
+                  <!-- IKLAN NATIVE ADSTERRA di bawah overview -->
                   <div class="my-4 text-center">
                     <div class="ad-container">
                       <div class="ad-item">
                         <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
                       </div>
-                      <div class="ad-item">
-                        <div id="container-cd1096097e3fd55fe2a731d9cf31759f"></div>
-                      </div>
                     </div>
                   </div>
 
-                  <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4"  />
+                  <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4" />
                   <Episodes :tvId="$route.params.id" :seasonNumber="item.number_of_seasons" :episodeNumber="selectEpisode" />
 
                   <Casts :id="$route.params.id" :type="'tv'" class="mb-4" />
@@ -80,109 +77,108 @@
 const mopie = require('~/mopie')
 
 export default {
-    name: 'tv-id-slug',
-    head() {
-        return {
-        title: this.item.name+' - '+this.$i18n.t('Stream Free Movies & TV Shows'),
-        meta: [
-            {
-            hid: 'description',
-            name: 'description',
-            content: this.item.name+' - '+this.$i18n.t('Stream Free Movies & TV Shows')
-            }
-        ]
+  name: 'tv-id-slug',
+  head() {
+    return {
+      title: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows'),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
         }
-    },
-    async fetch() {
-        let params = {
-            api_key: mopie.API_KEY,
-            include_adult: false,
-            language: this.$i18n.locale,
-        }
+      ]
+    }
+  },
+  async fetch() {
+    let params = {
+      api_key: mopie.API_KEY,
+      include_adult: false,
+      language: this.$i18n.locale,
+    }
 
-        this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, {params: params})
+    this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, { params: params })
+  },
+  data() {
+    return {
+      item: []
+    }
+  },
+  computed: {
+    id() {
+      return this.$route.params.id
     },
-    data() {
-      return {
-        item: []
+    backdrop() {
+      if (this.item) {
+        return mopie.IMAGE_BACKDROP + this.item.backdrop_path
       }
     },
-    computed: {
-        id() {
-            return this.$route.params.id
-        },
-        backdrop() {
-            if (this.item) {
-                return mopie.IMAGE_BACKDROP+this.item.backdrop_path
-            }
-        },
-        year() {
-            if (this.item.first_air_date) {
-                return this.item.first_air_date.split('-')[0];
-            }
-        },
-        votes() {
-            if (this.item.vote_average) {
-                return Math.round(this.item.vote_average)
-            }
-        },
-        unvotes() {
-            if (this.votes) {
-                var unvote = 10 - this.votes
-                return [...Array(unvote).keys()];
-            }
-        }
+    year() {
+      if (this.item.first_air_date) {
+        return this.item.first_air_date.split('-')[0];
+      }
     },
-    methods: {
-        poster(poster) {
-            if (poster == null) {
-                return '/images/no-poster.png'
-            }
-
-            return mopie.IMAGE_POSTER+poster
-        },
-        slug(txt = '') {
-            return txt
-                    .toLowerCase()
-                    .replace(/ /g, '-')
-                    .replace(/[^\w-]+/g, '')
-        },
-        selectEpisode() {
-            
-        }
+    votes() {
+      if (this.item.vote_average) {
+        return Math.round(this.item.vote_average)
+      }
+    },
+    unvotes() {
+      if (this.votes) {
+        var unvote = 10 - this.votes
+        return [...Array(unvote).keys()];
+      }
     }
+  },
+  methods: {
+    poster(poster) {
+      if (poster == null) {
+        return '/images/no-poster.png'
+      }
+      return mopie.IMAGE_POSTER + poster
+    },
+    slug(txt = '') {
+      return txt
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '')
+    },
+    selectEpisode() {
+
+    }
+  }
 }
 </script>
 
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 10px;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-    background-color: #f1f1f1;
-    padding: 20px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+  background-color: #f1f1f1;
+  padding: 20px;
 }
 
 /* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
-    .ad-container {
-        width: 100%;
-    }
+  .ad-container {
+    width: 100%;
+  }
 
-    .ad-container .ad-item {
-        width: 100%;
-        margin-bottom: 15px;
-        padding: 15px;
-    }
+  .ad-container .ad-item {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+  }
 }
 </style>
