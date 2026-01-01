@@ -155,40 +155,34 @@ export default {
 </script>
 
 <style scoped>
-/* Wrapper untuk iklan banner */
+/* Wrapper untuk iklan banner menggunakan CSS Grid */
 .ad-container {
-    display: flex;
-    justify-content: space-between; /* Menjaga jarak antar kolom */
-    align-items: flex-start; /* Menjaga elemen tetap berada di atas */
-    flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Membuat dua kolom yang fleksibel */
     gap: 10px; /* Jarak antar elemen */
     width: 100%; /* Lebar penuh dari kontainer induk */
     max-width: 600px; /* Lebar maksimum banner iklan */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 10px; /* Padding untuk ruang sekitar kontainer */
+    padding: 10px; /* Padding di sekitar kontainer */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    flex: 1 1 48%; /* Setiap elemen iklan mengambil 48% lebar */
-    max-width: 48%; /* Memastikan lebar maksimum iklan tidak lebih dari 48% */
-    box-sizing: border-box;
-    height: auto; /* Menjaga agar tinggi iklan sesuai dengan ukuran konten */
+    width: 100%; /* Memastikan setiap item menggunakan lebar penuh */
+    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
     margin-bottom: 10px; /* Memberikan jarak antar elemen iklan */
 }
 
-/* Memaksa dua kolom tetap ada pada perangkat kecil */
+/* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
+    /* Di perangkat mobile, iklan tetap dua kolom */
     .ad-container {
-        display: flex; /* Menjaga kolom tetap 2 */
-        justify-content: space-between; /* Menjaga jarak antar elemen */
-        flex-wrap: nowrap; /* Menghindari kolom jadi satu baris */
+        grid-template-columns: repeat(2, 1fr); /* Tetap dua kolom */
+        gap: 10px; /* Jarak antar kolom */
     }
 
     .ad-container .ad-item {
-        flex: 1 1 48%; /* Membuat dua kolom tetap ada di perangkat kecil */
-        max-width: 48%; /* Membatasi lebar kolom agar tidak lebih dari 48% */
-        margin-bottom: 10px; /* Jarak antar kolom */
+        width: 100%; /* Setiap elemen iklan tetap mengisi 100% kolom */
     }
 }
 </style>
