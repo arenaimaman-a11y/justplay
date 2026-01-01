@@ -159,13 +159,13 @@ export default {
 .ad-container {
     display: flex;
     justify-content: center; /* Menengahkan iklan */
-    align-items: center; /* Menjaga iklan di tengah secara vertikal */
+    align-items: flex-start; /* Menjaga iklan tetap berada di atas secara vertikal */
     flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
     gap: 10px; /* Menambahkan jarak antar elemen */
     width: 100%; /* Lebar penuh dari kontainer induk */
     max-width: 600px; /* Lebar maksimum banner iklan */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 10px; /* Menambah ruang di sekitar kontainer iklan */
+    padding: 10px; /* Memberikan padding di sekitar kontainer */
 }
 
 /* Gaya untuk setiap elemen iklan */
@@ -178,19 +178,12 @@ export default {
 
 /* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
-    .ad-container {
-        flex-direction: column; /* Menata iklan menjadi satu kolom pada layar kecil */
-        gap: 15px; /* Jarak antar elemen lebih besar di ponsel */
-        max-width: 90%; /* Lebar kontainer lebih kecil di ponsel */
-        padding: 5px; /* Mengurangi padding untuk perangkat kecil */
-    }
-    
     .ad-container .ad-item {
-        flex: 1 1 100%; /* Membuat iklan menggunakan lebar penuh pada ponsel */
-        max-width: 100%; /* Lebar maksimum iklan di ponsel */
-        height: auto; /* Menjaga tinggi otomatis di perangkat mobile */
+        flex: 1 1 48%; /* Menjaga iklan tetap dua kolom pada layar kecil */
+        max-width: 48%; /* Menjaga lebar maksimum iklan */
     }
 }
 </style>
+
 
 
