@@ -77,6 +77,7 @@
   </div>
 </template>
 
+
 <script>
 const mopie = require('~/mopie')
 
@@ -165,31 +166,37 @@ export default {
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-  display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
+  display: flex;
+  justify-content: center; /* Menengahkan iklan */
+  align-items: center; /* Menjaga iklan di tengah secara vertikal */
+  flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
+  gap: 10px; /* Menambahkan jarak antar elemen */
   width: 100%; /* Lebar penuh dari kontainer induk */
-  max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
+  max-width: 100%; /* Menjaga lebar iklan tetap maksimal */
   margin: 0 auto; /* Menjaga iklan tetap di tengah */
-  padding: 0; /* Menghapus padding jika tidak diperlukan */
+  padding: 0;
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-  width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
-  height: auto; /* Memastikan iklan tidak memanjang ke bawah */
-  margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
+  width: 48%; /* Membuat dua kolom */
+  height: auto; /* Memastikan iklan tidak terlalu memanjang secara vertikal */
   background-color: #f1f1f1; /* Memberikan warna latar belakang agar lebih terlihat */
-  padding: 20px; /* Menambahkan sedikit padding dalam elemen iklan */
+  padding: 20px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
 }
 
 /* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
   .ad-container {
-    width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
+    flex-direction: column; /* Menata iklan menjadi satu kolom pada layar kecil */
+    gap: 15px; /* Jarak antar elemen lebih besar di ponsel */
+    max-width: 100%;
   }
 
   .ad-container .ad-item {
-    width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
-    margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
+    width: 100%; /* Setiap elemen menggunakan lebar penuh pada ponsel */
     padding: 15px; /* Padding lebih kecil di perangkat mobile */
   }
 }
