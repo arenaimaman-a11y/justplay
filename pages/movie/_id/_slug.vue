@@ -44,11 +44,11 @@
                                         </div>
                                     </div>
                                     <p class="text-muted">{{ item.overview }}</p>
+
                                     <!-- IKLAN NATIVE ADSTERRA -->
                                     <div class="my-4 text-center">
-                                    <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
+                                        <div id="container-cd1096097e3fd55fe2a731d9cf31759e" class="ad-container"></div>
                                     </div>
-
 
                                     <Casts :id="id" :type="'movie'" class="mb-4"  />
                                     <Recommendations :id="id" :type="'movie'" class="mb-4" />
@@ -62,6 +62,31 @@
         </div>
     </div>
 </template>
+<style scoped>
+/* Responsif Wrapper untuk Iklan */
+.ad-container {
+    width: 100%;
+    max-width: 600px; /* Mengatur lebar maksimum untuk desktop */
+    margin: 0 auto; /* Menengahkan elemen iklan */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Media query untuk tablet dan perangkat lebih kecil */
+@media (max-width: 768px) {
+    .ad-container {
+        width: 90%;  /* Mengurangi lebar pada layar lebih kecil */
+    }
+}
+
+/* Media query untuk ponsel */
+@media (max-width: 576px) {
+    .ad-container {
+        width: 100%;  /* Menggunakan lebar penuh pada ponsel */
+        padding: 0 10px; /* Memberikan sedikit jarak di sisi kiri dan kanan */
+    }
+}
+</style>
 
 <script>
 const mopie = require('~/mopie')
@@ -91,6 +116,7 @@ export default {
         }
       ],
 
+      // Skrip iklan disertakan di sini
       script: [
         {
           hid: 'adsterra-native-movie',
@@ -144,4 +170,5 @@ export default {
   }
 }
 </script>
+
 
