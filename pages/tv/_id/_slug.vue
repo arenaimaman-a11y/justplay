@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Player :backdrop="backdrop" :title="item.title" :runtime="item.episode_run_time" />
+    <Player :backdrop="backdrop" :title="item.name" :runtime="item.episode_run_time" />
 
     <div class="container box-info">
       <div class="row justify-content-center">
@@ -10,7 +10,7 @@
               <div class="row">
                 <div class="col-lg-3 d-none d-lg-block">
                   <aside>
-                    <img :src="poster(item.poster_path)" :alt="item.title" class="img-fluid rounded mb-4" />
+                    <img :src="poster(item.poster_path)" :alt="item.name" class="img-fluid rounded mb-4" />
                     <div class="mb-3 d-flex justify-content-around">
                       <div v-for="(item, index) in votes" :key="index" style="color: #f1c830">
                         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
@@ -38,6 +38,7 @@
                     </table>
                   </aside>
                 </div>
+
                 <div class="col-lg-9">
                   <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
                     <div class="title">
@@ -49,11 +50,14 @@
                   </div>
                   <p class="text-muted">{{ item.overview }}</p>
 
-                  <!-- IKLAN NATIVE ADSTERRA di bawah overview -->
+                  <!-- IKLAN NATIVE ADSTERRA -->
                   <div class="my-4 text-center">
                     <div class="ad-container">
                       <div class="ad-item">
                         <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
+                      </div>
+                      <div class="ad-item">
+                        <div id="container-cd1096097e3fd55fe2a731d9cf31759f"></div>
                       </div>
                     </div>
                   </div>
@@ -86,6 +90,14 @@ export default {
           hid: 'description',
           name: 'description',
           content: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
+        }
+      ],
+      script: [
+        {
+          hid: 'adsterra-native-tv',
+          async: true,
+          'data-cfasync': 'false',
+          src: 'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
         }
       ]
     }
@@ -153,32 +165,32 @@ export default {
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 10px;
+  display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
+  width: 100%; /* Lebar penuh dari kontainer induk */
+  max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
+  margin: 0 auto; /* Menjaga iklan tetap di tengah */
+  padding: 0; /* Menghapus padding jika tidak diperlukan */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-  width: 100%;
-  height: auto;
-  margin-bottom: 15px;
-  background-color: #f1f1f1;
-  padding: 20px;
+  width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
+  height: auto; /* Memastikan iklan tidak memanjang ke bawah */
+  margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
+  background-color: #f1f1f1; /* Memberikan warna latar belakang agar lebih terlihat */
+  padding: 20px; /* Menambahkan sedikit padding dalam elemen iklan */
 }
 
 /* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
   .ad-container {
-    width: 100%;
+    width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
   }
 
   .ad-container .ad-item {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 15px;
+    width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
+    margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
+    padding: 15px; /* Padding lebih kecil di perangkat mobile */
   }
 }
 </style>
