@@ -164,6 +164,17 @@ export default {
 </script>
 
 <style scoped>
+/* Mengatur latar belakang untuk memastikan transparansi di semua elemen */
+*,
+*::before,
+*::after {
+  background-color: transparent !important; /* Mengatur latar belakang transparan di semua elemen */
+  border: none !important; /* Menghapus border di semua elemen */
+  box-sizing: border-box; /* Menggunakan box-sizing yang benar */
+  margin: 0;
+  padding: 0;
+}
+
 /* Wrapper untuk iklan banner */
 .ad-container {
   display: flex;
@@ -177,7 +188,6 @@ export default {
   padding: 0; /* Menghilangkan padding yang mungkin menyebabkan jarak */
   background-color: transparent; /* Menghilangkan background putih */
   box-sizing: border-box; /* Mengatur box model untuk mencakup padding dan margin dengan benar */
-  border: none; /* Pastikan tidak ada border */
 }
 
 /* Gaya untuk setiap elemen iklan */
@@ -206,16 +216,14 @@ export default {
   }
 }
 
-/* Menghilangkan margin dan padding pada elemen lain yang bisa mempengaruhi */
-body, .container {
-  margin: 0; /* Pastikan tidak ada margin yang mengganggu */
-  padding: 0; /* Hapus padding yang bisa menyebabkan garis */
-}
-
-/* Pastikan tidak ada border di body atau container */
+/* Pastikan tidak ada margin dan padding tambahan di container atau body */
 body, .container, .row {
-  border: none;
+  background-color: transparent; /* Pastikan seluruh body memiliki latar belakang transparan */
+  border: none; /* Pastikan tidak ada border */
+  margin: 0;
+  padding: 0;
 }
 </style>
+
 
 
