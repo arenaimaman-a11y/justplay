@@ -158,31 +158,37 @@ export default {
 /* Wrapper untuk iklan banner */
 .ad-container {
     display: flex;
-    justify-content: space-between; /* Memberikan ruang yang merata antar elemen */
+    justify-content: space-between; /* Menjaga jarak antar kolom */
     align-items: flex-start; /* Menjaga elemen tetap berada di atas */
     flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
-    gap: 15px; /* Menambahkan jarak antar elemen */
+    gap: 10px; /* Jarak antar elemen */
     width: 100%; /* Lebar penuh dari kontainer induk */
     max-width: 600px; /* Lebar maksimum banner iklan */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 0 10px; /* Memberikan padding horizontal di sekitar kontainer */
+    padding: 10px; /* Padding untuk ruang sekitar kontainer */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    flex: 1 1 48%; /* Membuat dua kolom dengan sedikit jarak antar elemen */
-    max-width: 48%; /* Menjaga lebar maksimum iklan */
+    flex: 1 1 48%; /* Setiap elemen iklan mengambil 48% lebar */
+    max-width: 48%; /* Memastikan lebar maksimum iklan tidak lebih dari 48% */
     box-sizing: border-box;
-    height: auto; /* Memastikan iklan tidak terlalu memanjang secara vertikal */
-    margin-bottom: 10px; /* Memberikan jarak antara elemen iklan */
+    height: auto; /* Menjaga agar tinggi iklan sesuai dengan ukuran konten */
+    margin-bottom: 10px; /* Memberikan jarak antar elemen iklan */
 }
 
-/* Media Query untuk tampilan perangkat mobile */
+/* Memaksa dua kolom tetap ada pada perangkat kecil */
 @media (max-width: 576px) {
+    .ad-container {
+        display: flex; /* Menjaga kolom tetap 2 */
+        justify-content: space-between; /* Menjaga jarak antar elemen */
+        flex-wrap: nowrap; /* Menghindari kolom jadi satu baris */
+    }
+
     .ad-container .ad-item {
-        flex: 1 1 48%; /* Menjaga iklan tetap dua kolom pada layar kecil */
-        max-width: 48%; /* Menjaga lebar maksimum iklan */
-        margin-bottom: 10px; /* Memberikan jarak antar elemen di mobile */
+        flex: 1 1 48%; /* Membuat dua kolom tetap ada di perangkat kecil */
+        max-width: 48%; /* Membatasi lebar kolom agar tidak lebih dari 48% */
+        margin-bottom: 10px; /* Jarak antar kolom */
     }
 }
 </style>
