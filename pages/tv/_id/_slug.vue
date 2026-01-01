@@ -164,36 +164,32 @@ export default {
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-    display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
-    width: 100%; /* Lebar penuh dari kontainer induk */
-    max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
+    display: flex; /* Menggunakan flexbox agar elemen saling sejajar */
+    justify-content: space-between; /* Jarak antar iklan */
+    flex-wrap: wrap; /* Membungkus elemen jika perlu */
+    width: 100%; /* Memastikan lebar penuh dari kontainer induk */
+    max-width: 100%; /* Menghilangkan pembatasan lebar maksimum */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 0; /* Menghapus padding jika tidak diperlukan */
-    background-color: transparent; /* Transparent background */
-    border: none; /* Menghilangkan border */
-    outline: none; /* Menghilangkan outline */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
-    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
-    margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
-    background-color: transparent; /* Memberikan warna latar belakang agar lebih terlihat */
-    padding: 0; /* Padding 0 agar tidak ada jarak */
-    border: none; /* Menghilangkan border */
+    flex: 1 1 48%; /* Setiap elemen menggunakan 48% dari lebar kontainer */
+    height: 200px; /* Menetapkan tinggi iklan */
+    background-color: transparent; /* Membuat latar belakang transparan */
+    margin-bottom: 15px; /* Jarak antar elemen iklan */
 }
 
-/* Media Query untuk tampilan perangkat mobile */
+/* Media Query untuk perangkat kecil (mobile) */
 @media (max-width: 576px) {
     .ad-container {
-        width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
+        flex-direction: column; /* Menata iklan menjadi satu kolom di perangkat mobile */
+        gap: 15px; /* Jarak antar elemen iklan lebih besar pada ponsel */
     }
 
     .ad-container .ad-item {
-        width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
-        margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
-        padding: 0; /* Padding lebih kecil di perangkat mobile */
+        flex: 1 1 100%; /* Membuat iklan menggunakan 100% lebar pada ponsel */
+        height: 150px; /* Lebih kecil pada ponsel */
     }
 }
 </style>
