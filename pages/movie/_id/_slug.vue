@@ -122,7 +122,10 @@ export default {
             return this.$route.params.id
         },
         backdrop() {
-            return mopie.IMAGE_BACKDROP + this.item.backdrop_path
+            return this.item.backdrop_path ? mopie.IMAGE_BACKDROP + this.item.backdrop_path : '/images/no-backdrop.png'
+        },
+        poster() {
+            return this.item.poster_path ? mopie.IMAGE_POSTER + this.item.poster_path : '/images/no-poster.png'
         },
         year() {
             return this.item.release_date?.split('-')[0]
