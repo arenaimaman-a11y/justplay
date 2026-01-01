@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Player :backdrop="backdrop" :title="item.name" :runtime="item.episode_run_time" />
+        <Player :backdrop="backdrop" :title="item.title" :runtime="item.runtime" />
 
         <div class="container box-info">
             <div class="row justify-content-center">
@@ -10,7 +10,7 @@
                             <div class="row">
                                 <div class="col-lg-3 d-none d-lg-block">
                                     <aside>
-                                        <img :src="poster(item.poster_path)" :alt="item.name" class="img-fluid rounded mb-4" />
+                                        <img :src="poster" :alt="item.title" class="img-fluid rounded mb-4" />
                                         <div class="mb-3 d-flex justify-content-around">
                                             <div v-for="(item, index) in votes" :key="index" style="color: #f1c830">
                                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -32,7 +32,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>{{ $t('Runtime') }}</td>
-                                                    <td class="text-muted small">{{ this._.head(item.episode_run_time) }} min</td>
+                                                    <td class="text-muted small">{{ item.runtime }} min</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -41,7 +41,7 @@
                                 <div class="col-lg-9">
                                     <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
                                         <div class="title">
-                                            <h1 class="text-light h3">{{ item.name }} <span class="text-muted fs-4">({{ year }})</span></h1>
+                                            <h1 class="text-light h3">{{ item.title }} <span class="text-muted fs-4">({{ year }})</span></h1>
                                         </div>
                                         <div class="dl mb-3 mb-md-0 text-center">
                                             <ButtonDownload />
@@ -61,10 +61,9 @@
                                         </div>
                                     </div>
 
-                                    <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4" />
-                                    <Episodes :tvId="$route.params.id" :seasonNumber="item.number_of_seasons" :episodeNumber="selectEpisode" />
-                                    <Casts :id="$route.params.id" :type="'tv'" class="mb-4" />
-                                    <Recommendations :id="$route.params.id" :type="'tv'" />
+                                    <Casts :id="id" :type="'movie'" class="mb-4" />
+                                    <Recommendations :id="id" :type="'movie'" />
+                                    <Similars :id="id" :type="'movie'" />
                                 </div>
                             </div>
                         </div>
@@ -79,16 +78,24 @@
 const mopie = require('~/mopie')
 
 export default {
-    name: 'tv-id-slug',
+    name: 'movie-id-slug',
 
     head() {
         return {
-            title: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows'),
+            title: this.item.title + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows'),
             meta: [
                 {
                     hid: 'description',
                     name: 'description',
-                    content: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
+                    content: this.item.title + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
+                }
+            ],
+            script: [
+                {
+                    hid: 'adsterra-native-movie',
+                    async: true,
+                    'data-cfasync': 'false',
+                    src: 'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
                 }
             ]
         }
@@ -101,10 +108,7 @@ export default {
             language: this.$i18n.locale
         }
 
-        this.item = await this.$axios.$get(
-            `tv/${this.$route.params.id}`,
-            { params }
-        )
+        this.item = await this.$axios.$get(`movie/${this.$route.params.id}`, { params })
     },
 
     data() {
@@ -118,44 +122,28 @@ export default {
             return this.$route.params.id
         },
         backdrop() {
-            if (this.item) {
-                return mopie.IMAGE_BACKDROP + this.item.backdrop_path
-            }
+            return mopie.IMAGE_BACKDROP + this.item.backdrop_path
         },
         year() {
-            if (this.item.first_air_date) {
-                return this.item.first_air_date.split('-')[0];
-            }
+            return this.item.release_date?.split('-')[0]
         },
         votes() {
-            if (this.item.vote_average) {
-                return Math.round(this.item.vote_average)
-            }
+            return Math.round(this.item.vote_average || 0)
         },
         unvotes() {
-            if (this.votes) {
-                var unvote = 10 - this.votes
-                return [...Array(unvote).keys()];
-            }
+            return Array(10 - this.votes).fill(0)
         }
     },
 
     methods: {
         poster(poster) {
-            if (poster == null) {
-                return '/images/no-poster.png'
-            }
-
-            return mopie.IMAGE_POSTER + poster
+            return poster ? mopie.IMAGE_POSTER + poster : '/images/no-poster.png'
         },
         slug(txt = '') {
-            return txt
-                .toLowerCase()
-                .replace(/ /g, '-')
-                .replace(/[^\w-]+/g, '')
+            return txt.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         },
         selectEpisode() {
-            
+            // Logic for selecting episode
         }
     }
 }
@@ -164,36 +152,34 @@ export default {
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-    display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
-    width: 100%; /* Lebar penuh dari kontainer induk */
-    max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
-    margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 0; /* Menghapus padding jika tidak diperlukan */
-    background-color: transparent; /* Transparent background */
-    border: none; /* Menghilangkan border */
-    outline: none; /* Menghilangkan outline */
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
 }
 
-/* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
-    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
-    margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
-    background-color: transparent; /* Memberikan warna latar belakang agar lebih terlihat */
-    padding: 0; /* Padding 0 agar tidak ada jarak */
-    border: none; /* Menghilangkan border */
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
 }
 
-/* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
     .ad-container {
-        width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
+        width: 100%;
     }
 
     .ad-container .ad-item {
-        width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
-        margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
-        padding: 0; /* Padding lebih kecil di perangkat mobile */
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 0;
     }
 }
 </style>
