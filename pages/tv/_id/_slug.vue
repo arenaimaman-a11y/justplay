@@ -164,66 +164,63 @@ export default {
 </script>
 
 <style scoped>
-/* Mengatur latar belakang untuk memastikan transparansi di semua elemen */
+/* Global rule to reset margin, padding, and set transparent background */
 *,
 *::before,
 *::after {
-  background-color: transparent !important; /* Mengatur latar belakang transparan di semua elemen */
-  border: none !important; /* Menghapus border di semua elemen */
-  box-sizing: border-box; /* Menggunakan box-sizing yang benar */
+  background-color: transparent !important; /* Set transparent background for all elements */
+  border: none !important; /* Remove any borders */
+  box-sizing: border-box; /* Use box-sizing for proper padding and margin calculations */
   margin: 0;
   padding: 0;
 }
 
-/* Wrapper untuk iklan banner */
+/* Wrapper for the ad container to ensure full width and alignment */
 .ad-container {
   display: flex;
-  justify-content: center; /* Menengahkan iklan */
-  align-items: center; /* Menjaga iklan di tengah secara vertikal */
-  flex-wrap: wrap; /* Membungkus elemen jika diperlukan */
-  gap: 10px; /* Menambahkan jarak antar elemen */
-  width: 100%; /* Lebar penuh dari kontainer induk */
-  max-width: 100%; /* Menjaga lebar iklan tetap maksimal */
-  margin: 0; /* Hapus margin di luar kontainer */
-  padding: 0; /* Menghilangkan padding yang mungkin menyebabkan jarak */
-  background-color: transparent; /* Menghilangkan background putih */
-  box-sizing: border-box; /* Mengatur box model untuk mencakup padding dan margin dengan benar */
+  justify-content: center; /* Center the ads horizontally */
+  align-items: center; /* Center the ads vertically */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 10px; /* Space between ads */
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Max width to prevent it from being too wide */
+  margin: 0 auto; /* Center container */
+  padding: 0; /* Remove padding */
+  background-color: transparent; /* Transparent background */
+  box-sizing: border-box; /* Ensure box sizing is correct */
 }
 
-/* Gaya untuk setiap elemen iklan */
+/* Individual ad item styling */
 .ad-container .ad-item {
-  width: 48%; /* Membuat dua kolom */
-  height: auto; /* Memastikan iklan tidak terlalu memanjang secara vertikal */
-  background-color: transparent; /* Pastikan latar belakang iklan tidak menyebabkan garis putih */
-  padding: 0; /* Menghapus padding yang tidak perlu */
-  margin-bottom: 10px; /* Memberikan jarak antar iklan */
-  box-sizing: border-box; /* Mengatur ukuran kotak termasuk padding dan margin */
-  border: none; /* Pastikan tidak ada border di setiap item iklan */
+  flex: 1 1 48%; /* Allow ads to take 48% of the width on large screens (2 ads per row) */
+  height: auto; /* Ensure ads don't stretch vertically */
+  background-color: transparent; /* No background color */
+  padding: 0; /* Remove padding */
+  margin-bottom: 10px; /* Space between ads */
+  box-sizing: border-box; /* Proper box-sizing for padding and margin */
 }
 
-/* Media Query untuk tampilan perangkat mobile */
-@media (max-width: 576px) {
+/* Media Query for small screens */
+@media (max-width: 768px) {
   .ad-container {
-    flex-direction: column; /* Menata iklan menjadi satu kolom pada layar kecil */
-    gap: 10px; /* Jarak antar elemen lebih besar di ponsel */
+    max-width: 100%; /* Make the ad container full width on smaller screens */
+    padding: 0 15px; /* Add padding for better spacing */
   }
 
   .ad-container .ad-item {
-    width: 100%; /* Setiap elemen iklan menggunakan lebar penuh pada perangkat mobile */
-    margin-bottom: 10px; /* Jarak antar elemen di perangkat mobile */
-    padding: 0; /* Hapus padding di perangkat mobile */
-    border: none; /* Pastikan tidak ada border di perangkat mobile */
+    flex: 1 1 100%; /* Ads take full width on small screens */
+    margin-bottom: 15px; /* Add space between ads */
   }
 }
 
-/* Pastikan tidak ada margin dan padding tambahan di container atau body */
+/* Ensure transparency in the body and container */
 body, .container, .row {
-  background-color: transparent; /* Pastikan seluruh body memiliki latar belakang transparan */
-  border: none; /* Pastikan tidak ada border */
+  background-color: transparent; /* No background color */
   margin: 0;
   padding: 0;
 }
 </style>
+
 
 
 
