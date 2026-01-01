@@ -173,31 +173,34 @@ export default {
   gap: 10px; /* Menambahkan jarak antar elemen */
   width: 100%; /* Lebar penuh dari kontainer induk */
   max-width: 100%; /* Menjaga lebar iklan tetap maksimal */
-  margin: 0 auto; /* Menjaga iklan tetap di tengah */
-  padding: 0;
+  margin: 0; /* Hapus margin di luar kontainer */
+  padding: 0; /* Menghilangkan padding yang mungkin menyebabkan jarak */
+  background-color: transparent; /* Menghilangkan background putih */
+  box-sizing: border-box; /* Mengatur box model untuk mencakup padding dan margin dengan benar */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
   width: 48%; /* Membuat dua kolom */
   height: auto; /* Memastikan iklan tidak terlalu memanjang secara vertikal */
-  background-color: #f1f1f1; /* Memberikan warna latar belakang agar lebih terlihat */
-  padding: 20px;
-  margin-bottom: 15px;
-  box-sizing: border-box;
+  background-color: transparent; /* Pastikan latar belakang iklan tidak menyebabkan garis putih */
+  padding: 0; /* Menghapus padding yang tidak perlu */
+  margin-bottom: 10px; /* Memberikan jarak antar iklan */
+  box-sizing: border-box; /* Mengatur ukuran kotak termasuk padding dan margin */
 }
 
 /* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
   .ad-container {
     flex-direction: column; /* Menata iklan menjadi satu kolom pada layar kecil */
-    gap: 15px; /* Jarak antar elemen lebih besar di ponsel */
-    max-width: 100%;
+    gap: 10px; /* Jarak antar elemen lebih besar di ponsel */
   }
 
   .ad-container .ad-item {
-    width: 100%; /* Setiap elemen menggunakan lebar penuh pada ponsel */
-    padding: 15px; /* Padding lebih kecil di perangkat mobile */
+    width: 100%; /* Setiap elemen iklan menggunakan lebar penuh pada perangkat mobile */
+    margin-bottom: 10px; /* Jarak antar elemen di perangkat mobile */
+    padding: 0; /* Hapus padding di perangkat mobile */
   }
 }
 </style>
+
