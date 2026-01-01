@@ -157,29 +157,32 @@ export default {
 <style scoped>
 /* Wrapper untuk iklan banner */
 .ad-container {
-    display: block; /* Menggunakan block layout */
+    display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
     width: 100%; /* Lebar penuh dari kontainer induk */
-    max-width: 600px; /* Lebar maksimum banner iklan */
+    max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 10px; /* Padding di sekitar kontainer */
+    padding: 0; /* Menghapus padding jika tidak diperlukan */
 }
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    width: 100%; /* Mengatur elemen untuk menggunakan 100% lebar */
-    height: auto; /* Memastikan iklan tidak memanjang secara vertikal */
-    margin-bottom: 10px; /* Memberikan jarak antar elemen iklan */
+    width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
+    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
+    margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
+    background-color: #f1f1f1; /* Memberikan warna latar belakang agar lebih terlihat */
+    padding: 20px; /* Menambahkan sedikit padding dalam elemen iklan */
 }
 
-/* Media Query untuk perangkat mobile - tidak perlu ada perubahan */
+/* Media Query untuk tampilan perangkat mobile */
 @media (max-width: 576px) {
     .ad-container {
-        /* Tidak ada perubahan untuk perangkat mobile */
+        width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
     }
 
     .ad-container .ad-item {
-        width: 100%; /* Menjaga ukuran penuh pada perangkat mobile */
-        margin-bottom: 10px; /* Jarak antar elemen di mobile */
+        width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
+        margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
+        padding: 15px; /* Padding lebih kecil di perangkat mobile */
     }
 }
 </style>
