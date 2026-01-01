@@ -155,11 +155,9 @@ export default {
 </script>
 
 <style scoped>
-/* Wrapper untuk iklan banner menggunakan CSS Grid */
+/* Wrapper untuk iklan banner */
 .ad-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Membuat dua kolom yang fleksibel */
-    gap: 10px; /* Jarak antar elemen */
+    display: block; /* Menggunakan block layout */
     width: 100%; /* Lebar penuh dari kontainer induk */
     max-width: 600px; /* Lebar maksimum banner iklan */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
@@ -168,24 +166,25 @@ export default {
 
 /* Gaya untuk setiap elemen iklan */
 .ad-container .ad-item {
-    width: 100%; /* Memastikan setiap item menggunakan lebar penuh */
-    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
+    width: 100%; /* Mengatur elemen untuk menggunakan 100% lebar */
+    height: auto; /* Memastikan iklan tidak memanjang secara vertikal */
     margin-bottom: 10px; /* Memberikan jarak antar elemen iklan */
 }
 
-/* Media Query untuk tampilan perangkat mobile */
+/* Media Query untuk perangkat mobile - tidak perlu ada perubahan */
 @media (max-width: 576px) {
-    /* Di perangkat mobile, iklan tetap dua kolom */
     .ad-container {
-        grid-template-columns: repeat(2, 1fr); /* Tetap dua kolom */
-        gap: 10px; /* Jarak antar kolom */
+        /* Tidak ada perubahan untuk perangkat mobile */
     }
 
     .ad-container .ad-item {
-        width: 100%; /* Setiap elemen iklan tetap mengisi 100% kolom */
+        width: 100%; /* Menjaga ukuran penuh pada perangkat mobile */
+        margin-bottom: 10px; /* Jarak antar elemen di mobile */
     }
 }
 </style>
+
+
 
 
 
