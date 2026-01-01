@@ -70,7 +70,6 @@
     </div>
 </template>
 
-
 <script>
 const mopie = require('~/mopie')
 
@@ -99,7 +98,6 @@ export default {
         }
       ],
 
-      // Skrip iklan disertakan di sini
       script: [
         {
           hid: 'adsterra-native-movie',
@@ -162,6 +160,7 @@ export default {
     max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
     margin: 0 auto; /* Menjaga iklan tetap di tengah */
     padding: 0; /* Menghapus padding jika tidak diperlukan */
+    background-color: transparent; /* Transparent background */
 }
 
 /* Gaya untuk setiap elemen iklan */
@@ -169,7 +168,7 @@ export default {
     width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
     height: auto; /* Memastikan iklan tidak memanjang ke bawah */
     margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
-    background-color: #f1f1f1; /* Memberikan warna latar belakang agar lebih terlihat */
+    background-color: transparent; /* Memberikan warna latar belakang agar lebih terlihat */
     padding: 20px; /* Menambahkan sedikit padding dalam elemen iklan */
 }
 
@@ -186,9 +185,3 @@ export default {
     }
 }
 </style>
-
-
-
-
-
-
