@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://justplay-tv.online/sitemap.xml

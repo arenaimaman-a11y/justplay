@@ -1,62 +1,75 @@
 <template>
-    <div v-if="results.length">
-        <h2 class="h5 mb-3 text-muted">{{ $t('People who also liked') }}</h2>
-        <Carousel
-            :perPage="3"
-            :perPageCustom="[[1024, 5]]"
-            :paginationEnabled="false"
-            :navigationEnabled="true" >
-            <slide v-for="(item, index) in results" :key="index">
-                <Items :item="item" :type="type" />
-            </slide>
-        </Carousel>
-    </div>
-</template>
+  <div v-if="results.length">
+    <h2 class="h5 mb-3 text-muted">{{ $t('People who also liked') }}</h2>
 
-<style scoped>
-.cast_name {
-    color: #f1c830;
-    text-decoration: none;
-}
-.cast_name:hover {
-    color: #d5d5d5;
-}
-</style>
+    <!-- ✅ client-only -->
+    <client-only>
+      <Carousel
+        :perPage="3"
+        :perPageCustom="[[1024, 5]]"
+        :paginationEnabled="false"
+        :navigationEnabled="true"
+      >
+        <Slide v-for="(item, index) in results" :key="index">
+          <Items :item="item" :type="type" />
+        </Slide>
+      </Carousel>
+    </client-only>
+  </div>
+</template>
 
 <script>
 const mopie = require('~/mopie')
 
-import { Carousel, Slide } from 'vue-carousel';
-
 export default {
-    props: [
-        'type',
-        'id',
-    ],
-    components: {
-        Carousel,
-        Slide
-    },
-    data() {
-        return {
-            results: []
-        }
-    },
-    created() {
-        this.getCredits()
-    },
-    methods: {
-        getCredits() {
-            let params = {
-                api_key: mopie.API_KEY,
-                language: this.$i18n.locale
-            }
+  props: ['type', 'id'],
 
-            this.$axios.$get(`/${this.type}/${this.id}/recommendations`, { params:params })
-                .then((res) => {
-                    this.results = res.results
-                })
-        }
+  // ✅ dynamic import client-only
+  components: {
+    Carousel: () =>
+      process.client
+        ? import('vue-carousel').then(m => m.Carousel)
+        : null,
+
+    Slide: () =>
+      process.client
+        ? import('vue-carousel').then(m => m.Slide)
+        : null
+  },
+
+  data() {
+    return {
+      results: []
     }
+  },
+
+  created() {
+    this.getCredits()
+  },
+
+  methods: {
+    getCredits() {
+      const params = {
+        api_key: mopie.API_KEY,
+        language: this.$i18n.locale
+      }
+
+      this.$axios
+        .$get(`/${this.type}/${this.id}/recommendations`, { params })
+        .then(res => {
+          this.results = res.results
+        })
+    }
+  }
 }
 </script>
+
+<style scoped>
+.cast_name {
+  color: #f1c830;
+  text-decoration: none;
+}
+.cast_name:hover {
+  color: #d5d5d5;
+}
+</style>
