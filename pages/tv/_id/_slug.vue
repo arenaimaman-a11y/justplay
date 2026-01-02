@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Player :backdrop="backdrop" :title="item.name" :runtime="item.episode_run_time" />
+        <Player :backdrop="backdrop" :title="item.title" :runtime="item.episode_run_time" />
 
         <div class="container box-info">
             <div class="row justify-content-center">
@@ -10,25 +10,30 @@
                             <div class="row">
                                 <div class="col-lg-3 d-none d-lg-block">
                                     <aside>
-                                        <img :src="poster(item.poster_path)" :alt="item.name" class="img-fluid rounded mb-4" />
+                                        <img :src="poster(item.poster_path)" :alt="item.title" class="img-fluid rounded mb-4">
+
                                         <div class="mb-3 d-flex justify-content-around">
                                             <div v-for="(item, index) in votes" :key="index" style="color: #f1c830">
                                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                                                 </svg>
                                             </div>
                                             <div v-for="(item, index) in unvotes" :key="'un'+index">
                                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                                                 </svg>
                                             </div>
                                         </div>
-                                        
+
                                         <table class="table table-borderless">
                                             <tbody>
                                                 <tr>
                                                     <td>{{ $t('Genres') }}</td>
-                                                    <td class="text-muted small"><span v-for="(it, index) in item.genres" :key="index">{{ it.name }}, </span></td>
+                                                    <td class="text-muted small">
+                                                        <span v-for="(it, index) in item.genres" :key="index">
+                                                            {{ it.name }},
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>{{ $t('Runtime') }}</td>
@@ -38,31 +43,41 @@
                                         </table>
                                     </aside>
                                 </div>
+
                                 <div class="col-lg-9">
                                     <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
                                         <div class="title">
-                                            <h1 class="text-light h3">{{ item.name }} <span class="text-muted fs-4">({{ year }})</span></h1>
+                                            <h1 class="text-light h3">
+                                                {{ item.name }}
+                                                <span class="text-muted fs-4">({{ year }})</span>
+                                            </h1>
                                         </div>
                                         <div class="dl mb-3 mb-md-0 text-center">
                                             <ButtonDownload />
                                         </div>
                                     </div>
+
                                     <p class="text-muted">{{ item.overview }}</p>
 
-                                    <!-- IKLAN NATIVE ADSTERRA -->
+                                    <!-- ===== NATIVE ADS START ===== -->
                                     <div class="my-4 text-center">
-                                        <div class="ad-container">
-                                            <div class="ad-item">
-                                                <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
-                                            </div>
-                                            <div class="ad-item">
-                                                <div id="container-cd1096097e3fd55fe2a731d9cf31759f"></div>
-                                            </div>
-                                        </div>
+                                        <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
                                     </div>
+                                    <!-- ===== NATIVE ADS END ===== -->
 
-                                    <Seasons :number="item.number_of_seasons" :seasons="item.seasons" :title="slug(item.name)" class="mb-4" />
-                                    <Episodes :tvId="$route.params.id" :seasonNumber="item.number_of_seasons" :episodeNumber="selectEpisode" />
+                                    <Seasons
+                                        :number="item.number_of_seasons"
+                                        :seasons="item.seasons"
+                                        :title="slug(item.name)"
+                                        class="mb-4"
+                                    />
+
+                                    <Episodes
+                                        :tvId="$route.params.id"
+                                        :seasonNumber="item.number_of_seasons"
+                                        :episodeNumber="selectEpisode"
+                                    />
+
                                     <Casts :id="$route.params.id" :type="'tv'" class="mb-4" />
                                     <Recommendations :id="$route.params.id" :type="'tv'" />
                                 </div>
@@ -95,16 +110,23 @@ export default {
     },
 
     async fetch() {
-        const params = {
+        let params = {
             api_key: mopie.API_KEY,
             include_adult: false,
             language: this.$i18n.locale
         }
+        this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, { params })
+    },
 
-        this.item = await this.$axios.$get(
-            `tv/${this.$route.params.id}`,
-            { params }
-        )
+    mounted() {
+        if (process.client && !document.getElementById('effectivegate-native')) {
+            const script = document.createElement('script')
+            script.id = 'effectivegate-native'
+            script.async = true
+            script.setAttribute('data-cfasync', 'false')
+            script.src = 'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
+            document.body.appendChild(script)
+        }
     },
 
     data() {
@@ -114,86 +136,32 @@ export default {
     },
 
     computed: {
-        id() {
-            return this.$route.params.id
-        },
         backdrop() {
-            if (this.item) {
-                return mopie.IMAGE_BACKDROP + this.item.backdrop_path
-            }
+            return this.item ? mopie.IMAGE_BACKDROP + this.item.backdrop_path : ''
         },
         year() {
-            if (this.item.first_air_date) {
-                return this.item.first_air_date.split('-')[0];
-            }
+            return this.item.first_air_date
+                ? this.item.first_air_date.split('-')[0]
+                : ''
         },
         votes() {
-            if (this.item.vote_average) {
-                return Math.round(this.item.vote_average)
-            }
+            return this.item.vote_average
+                ? Math.round(this.item.vote_average)
+                : 0
         },
         unvotes() {
-            if (this.votes) {
-                var unvote = 10 - this.votes
-                return [...Array(unvote).keys()];
-            }
+            return this.votes ? [...Array(10 - this.votes).keys()] : []
         }
     },
 
     methods: {
         poster(poster) {
-            if (poster == null) {
-                return '/images/no-poster.png'
-            }
-
-            return mopie.IMAGE_POSTER + poster
+            return poster ? mopie.IMAGE_POSTER + poster : '/images/no-poster.png'
         },
         slug(txt = '') {
-            return txt
-                .toLowerCase()
-                .replace(/ /g, '-')
-                .replace(/[^\w-]+/g, '')
+            return txt.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         },
-        selectEpisode() {
-            
-        }
+        selectEpisode() {}
     }
 }
 </script>
-
-<style scoped>
-/* Wrapper untuk iklan banner */
-.ad-container {
-    display: block; /* Menggunakan layout block untuk memastikan elemen berada dalam satu baris */
-    width: 100%; /* Lebar penuh dari kontainer induk */
-    max-width: 100%; /* Menghilangkan pembatasan lebar maksimum agar kontainer bisa mengisi layar */
-    margin: 0 auto; /* Menjaga iklan tetap di tengah */
-    padding: 0; /* Menghapus padding jika tidak diperlukan */
-    background-color: transparent; /* Transparent background */
-    border: none; /* Menghilangkan border */
-    outline: none; /* Menghilangkan outline */
-}
-
-/* Gaya untuk setiap elemen iklan */
-.ad-container .ad-item {
-    width: 100%; /* Setiap elemen iklan menggunakan 100% lebar kontainer induk */
-    height: auto; /* Memastikan iklan tidak memanjang ke bawah */
-    margin-bottom: 15px; /* Memberikan jarak antar elemen iklan */
-    background-color: transparent; /* Memberikan warna latar belakang agar lebih terlihat */
-    padding: 0; /* Padding 0 agar tidak ada jarak */
-    border: none; /* Menghilangkan border */
-}
-
-/* Media Query untuk tampilan perangkat mobile */
-@media (max-width: 576px) {
-    .ad-container {
-        width: 100%; /* Memastikan lebar penuh pada perangkat mobile */
-    }
-
-    .ad-container .ad-item {
-        width: 100%; /* Setiap elemen tetap menggunakan lebar penuh pada perangkat mobile */
-        margin-bottom: 15px; /* Jarak antar elemen di perangkat mobile */
-        padding: 0; /* Padding lebih kecil di perangkat mobile */
-    }
-}
-</style>
