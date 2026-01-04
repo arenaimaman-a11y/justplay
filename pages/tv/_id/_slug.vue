@@ -48,9 +48,13 @@
                                     <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-column-reverse flex-md-row">
                                         <div class="title">
                                             <h1 class="text-light h3">
-                                                {{ item.name }}
-                                                <span class="text-muted fs-4">({{ year }})</span>
-                                            </h1>
+    {{ item.name }}
+    <span v-if="episodeInfo">
+        - Season {{ episodeInfo.season }} Episode {{ episodeInfo.episode }}
+    </span>
+    <span class="text-muted fs-4">({{ year }})</span>
+</h1>
+
                                         </div>
                                         <div class="dl mb-3 mb-md-0 text-center">
                                             <ButtonDownload />
@@ -96,18 +100,64 @@ const mopie = require('~/mopie')
 export default {
     name: 'tv-id-slug',
 
-    head() {
-        return {
-            title: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows'),
-            meta: [
-                {
-                    hid: 'description',
-                    name: 'description',
-                    content: this.item.name + ' - ' + this.$i18n.t('Stream Free Movies & TV Shows')
-                }
-            ]
-        }
-    },
+head() {
+    let title = this.item.name || ''
+
+    if (this.episodeInfo) {
+        title += ` - Season ${this.episodeInfo.season} Episode ${this.episodeInfo.episode}`
+    }
+
+    return {
+        title,
+
+        meta: [
+            {
+                hid: 'description',
+                name: 'description',
+                content: title
+            },
+            {
+                hid: 'og:title',
+                property: 'og:title',
+                content: title
+            },
+            {
+                hid: 'og:type',
+                property: 'og:type',
+                content: 'video.episode'
+            }
+        ],
+
+        link: [
+            {
+                rel: 'canonical',
+                href: `https://justplay-tv.online/tv/${this.$route.params.id}/${this.$route.params.slug}`
+            }
+        ],
+
+        // 🔥 STRUCTURED DATA (LEVEL PRO)
+        script: this.episodeInfo
+            ? [
+                  {
+                      hid: 'ld-json-episode',
+                      type: 'application/ld+json',
+                      json: {
+                          '@context': 'https://schema.org',
+                          '@type': 'TVEpisode',
+                          name: title,
+                          episodeNumber: this.episodeInfo.episode,
+                          seasonNumber: this.episodeInfo.season,
+                          partOfSeries: {
+                              '@type': 'TVSeries',
+                              name: this.item.name
+                          },
+                          url: `https://justplay-tv.online/tv/${this.$route.params.id}/${this.$route.params.slug}`
+                      }
+                  }
+              ]
+            : []
+    }
+},
 
     async fetch() {
         let params = {
@@ -118,17 +168,7 @@ export default {
         this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, { params })
     },
 
-    mounted() {
-        if (process.client && !document.getElementById('effectivegate-native')) {
-            const script = document.createElement('script')
-            script.id = 'effectivegate-native'
-            script.async = true
-            script.setAttribute('data-cfasync', 'false')
-            script.src = 'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
-            document.body.appendChild(script)
-        }
-    },
-
+    
     data() {
         return {
             item: []
@@ -139,29 +179,54 @@ export default {
         backdrop() {
             return this.item ? mopie.IMAGE_BACKDROP + this.item.backdrop_path : ''
         },
+
         year() {
             return this.item.first_air_date
                 ? this.item.first_air_date.split('-')[0]
                 : ''
         },
+
         votes() {
             return this.item.vote_average
                 ? Math.round(this.item.vote_average)
                 : 0
         },
+
         unvotes() {
             return this.votes ? [...Array(10 - this.votes).keys()] : []
-        }
+        },
+
+// 🔥 INI KUNCI SEASON & EPISODE (SEO READY)
+episodeInfo() {
+    const slug = this.$route.params.slug || ''
+
+    // Support:
+    // the-pitt-S2-E1
+    // the-pitt-s2-e1
+    // the-pitt-s02e01
+    const match = slug.match(/-s(\d{1,2})[-]?e(\d{1,2})$/i)
+
+    if (!match) return null
+
+    return {
+        season: parseInt(match[1], 10),
+        episode: parseInt(match[2], 10)
+    }
+}
+
     },
 
     methods: {
         poster(poster) {
             return poster ? mopie.IMAGE_POSTER + poster : '/images/no-poster.png'
         },
+
         slug(txt = '') {
             return txt.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
         },
+
         selectEpisode() {}
     }
 }
 </script>
+
