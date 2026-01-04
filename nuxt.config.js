@@ -5,7 +5,7 @@ export default {
   // CORE CONFIG
   // ===============================
   ssr: true,
-  target: 'static',
+  target: 'server',
 
   generate: {
     fallback: true
