@@ -101,11 +101,7 @@ export default {
     name: 'tv-id-slug',
 
 head() {
-    let title = this.item.name || ''
-
-    if (this.episodeInfo) {
-        title += ` - Season ${this.episodeInfo.season} Episode ${this.episodeInfo.episode}`
-    }
+    const title = this.pageTitle
 
     return {
         title,
@@ -135,7 +131,7 @@ head() {
             }
         ],
 
-        // 🔥 STRUCTURED DATA (LEVEL PRO)
+        // 🔥 STRUCTURED DATA (LEVEL PRO, AMAN SSR)
         script: this.episodeInfo
             ? [
                   {
@@ -149,7 +145,7 @@ head() {
                           seasonNumber: this.episodeInfo.season,
                           partOfSeries: {
                               '@type': 'TVSeries',
-                              name: this.item.name
+                              name: this.item?.name || title
                           },
                           url: `https://justplay-tv.online/tv/${this.$route.params.id}/${this.$route.params.slug}`
                       }
@@ -159,21 +155,23 @@ head() {
     }
 },
 
-    async fetch() {
-        let params = {
-            api_key: mopie.API_KEY,
-            include_adult: false,
-            language: this.$i18n.locale
-        }
-        this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, { params })
-    },
+    async asyncData({ params, $axios, i18n }) {
+    const apiParams = {
+        api_key: mopie.API_KEY,
+        include_adult: false,
+        language: i18n.locale
+    }
 
-    
-    data() {
-        return {
-            item: []
-        }
-    },
+    const item = await $axios.$get(`tv/${params.id}`, {
+        params: apiParams
+    })
+
+    return {
+        item
+    }
+},
+
+
 
     computed: {
         backdrop() {
@@ -185,6 +183,17 @@ head() {
                 ? this.item.first_air_date.split('-')[0]
                 : ''
         },
+        pageTitle() {
+    if (!this.item || !this.item.name) return 'JustPlay TV'
+
+    let title = this.item.name
+
+    if (this.episodeInfo) {
+        title += ` - Season ${this.episodeInfo.season} Episode ${this.episodeInfo.episode}`
+    }
+
+    return title
+},
 
         votes() {
             return this.item.vote_average
