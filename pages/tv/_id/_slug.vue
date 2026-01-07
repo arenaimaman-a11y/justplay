@@ -58,8 +58,6 @@
     </div>
   </div>
 </client-only>
-
-
     <!-- CONTENT -->
     <div class="container content">
       <div class="row g-4">
