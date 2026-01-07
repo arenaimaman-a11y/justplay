@@ -172,7 +172,7 @@
 
         <!-- ICON -->
         <div class="lock-circle mb-4">
-          <span>🔒</span>
+          <span>🎬</span>
         </div>
 
         <!-- TITLE -->
@@ -209,10 +209,6 @@
           </button>
 
         </div>
-
-        <small class="text-white-50 d-block mt-3">
-          No credit card required
-        </small>
 
       </div>
 
