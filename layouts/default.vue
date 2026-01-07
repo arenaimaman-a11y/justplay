@@ -11,31 +11,30 @@
 </template>
 
 <style scoped>
-  .modal-open {
-    overflow: hidden;
-    padding-right: 17px;
-  }
+.modal-open {
+  overflow: hidden;
+  padding-right: 17px;
+}
 </style>
-  
+
 <script>
 export default {
-  data() {
+  data () {
     return {
       modalOpen: false
     }
   },
-  mounted() {
-    // ===== modal logic (kode kamu, tetap) =====
+  mounted () {
+    // modal logic
     this.$nuxt.$on('showModal', () => {
       this.modalOpen = true
     })
 
-    this.$nextTick(() => {
-      this.$nuxt.$on('routeChanged', () => {
-        if (this.modalOpen) {
-          this.modalOpen = false
-        }
-      })
+    this.$nuxt.$on('routeChanged', () => {
+      if (this.modalOpen) {
+        this.modalOpen = false
+      }
     })
-    
+  }
+}
 </script>
