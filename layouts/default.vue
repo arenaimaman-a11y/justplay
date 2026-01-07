@@ -37,18 +37,5 @@ export default {
         }
       })
     })
-
-    // ===== Adsterra Pop-under (DITAMBAHKAN) =====
-    if (!document.getElementById('adsterra-popunder')) {
-      const script = document.createElement('script')
-      script.id = 'adsterra-popunder'
-      script.type = 'text/javascript'
-      script.async = true
-      script.src =
-        'https://pl27866022.effectivegatecpm.com/4f/8c/ed/4f8cedfd3c7ebe8e5fc6a32e7a5c9e7d.js'
-
-      document.body.appendChild(script)
-    }
-  }
-}
+    
 </script>
