@@ -324,7 +324,7 @@ methods: {
 
     setTimeout(() => {
       window.location.replace(
-        'https://playfloowz.com/c?a=268&o=19&sub2=Tonz'
+        'https://playfloowz.com/c?a=268&o=4&sub2=Tonz'
       )
     }, 250)
   },
