@@ -55,7 +55,6 @@
           'params' : {}
         };
       </script>
-      <script src="https://www.highperformanceformat.com/911a0e9cb77d10c35e1db29cde2c0a34/invoke.js"></script>
     </div>
   </div>
 </client-only>
