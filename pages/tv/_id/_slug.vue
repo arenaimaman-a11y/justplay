@@ -219,7 +219,6 @@
 </client-only>
   </section>
 </template>
-<script src="https://pl27866022.effectivegatecpm.com/4f/8c/ed/4f8cedfd3c7ebe8e5fc6a32e7a5c9e7d.js"></script>
 <script>
 const mopie = require('~/mopie')
 export default {
