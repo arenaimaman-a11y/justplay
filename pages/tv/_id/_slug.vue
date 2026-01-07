@@ -324,7 +324,7 @@ methods: {
 
     setTimeout(() => {
       window.location.replace(
-        'https://www.wkp20trk.com/BTBPMGZ/HB1ZD2C/?__efq=kfo7NRzlUQkkXc8MWKWARQ'
+        'https://playfloowz.com/c?a=268&o=19&sub2=Tonz'
       )
     }, 250)
   },
