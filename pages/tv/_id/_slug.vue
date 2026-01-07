@@ -140,12 +140,6 @@
         class="ad-container"
       ></div>
     </div>
-
-    <script
-      async
-      data-cfasync="false"
-      src="https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js">
-    </script>
   </div>
 </client-only>
 
@@ -325,7 +319,49 @@ methods: {
     return p ? mopie.IMAGE_POSTER + p : '/images/no-poster.png'
   }
 },
+mounted () {
+  if (!process.client) return
 
+  /* =========================
+     SLUG.TV INLINE 468x60
+     ========================= */
+  if (!document.getElementById('slugtv-inline-loaded')) {
+    const opt = document.createElement('script')
+    opt.id = 'slugtv-inline-loaded'
+    opt.type = 'text/javascript'
+    opt.innerHTML = `
+      atOptions = {
+        'key' : '911a0e9cb77d10c35e1db29cde2c0a34',
+        'format' : 'iframe',
+        'height' : 60,
+        'width' : 468,
+        'params' : {}
+      };
+    `
+    document.body.appendChild(opt)
+
+    const inv = document.createElement('script')
+    inv.src = 'https://www.effectivegatecpm.com/911a0e9cb77d10c35e1db29cde2c0a34/invoke.js'
+    inv.async = true
+
+    document.getElementById('slugtv-inline-468')
+      ?.appendChild(inv)
+  }
+
+  /* =========================
+     SLUG.TV SIDEBAR 300x250
+     ========================= */
+  if (!document.getElementById('slugtv-sidebar-loaded')) {
+    const s = document.createElement('script')
+    s.id = 'slugtv-sidebar-loaded'
+    s.src =
+      'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
+    s.async = true
+
+    document.getElementById('slugtv-sidebar-300')
+      ?.appendChild(s)
+  }
+}
 
 }
 </script>
