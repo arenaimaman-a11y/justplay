@@ -42,64 +42,41 @@
         </div>
       </div>
     </div>
-<!-- INLINE AD BELOW CTA -->
-<client-only>
-  <div class="inline-ad-banner">
-    <div class="ad-box">
-      <script>
-        atOptions = {
-          'key' : '911a0e9cb77d10c35e1db29cde2c0a34',
-          'format' : 'iframe',
-          'height' : 60,
-          'width' : 468,
-          'params' : {}
-        };
-      </script>
-    </div>
-  </div>
-</client-only>
     <!-- CONTENT -->
     <div class="container content">
       <div class="row g-4">
         <!-- MAIN -->
         <div class="col-lg-8">
-          <section class="panel episodes-panel" @click="onEpisodeClick">
-  <h5 class="panel-title">Seasons</h5>
-  <Seasons
-    :number="item.number_of_seasons"
-    :seasons="item.seasons"
-  />
-</section>
-
-
-          <section class="panel">
+          <section class="panel episodes-panel">
   <h5 class="panel-title">Episodes</h5>
 
-  <div class="episode-grid">
-    <div
+  <!-- Pilih Season -->
+  <div class="season-selector mb-3">
+    <button
+      v-for="season in item.seasons"
+      :key="season.id"
+      @click="selectSeason(season.season_number)"
+      :class="['season-btn', { active: season.season_number === selectedSeason }]"
+    >
+      S{{ season.season_number }}
+    </button>
+  </div>
+
+  <!-- Daftar Episode -->
+  <ul class="episode-list">
+    <li
       v-for="ep in episodes"
       :key="ep.id"
-      class="episode-card"
-      @click="playIntro"
+      @click="playIntro(ep)"
+      class="episode-item"
     >
-      <div
-        class="episode-thumb"
-        :style="{
-          backgroundImage: ep.still_path
-            ? `url(${IMAGE_STILL + ep.still_path})`
-            : 'linear-gradient(135deg,#222,#111)'
-        }"
-      >
-        <div class="episode-play">▶</div>
-      </div>
-
-      <div class="episode-info">
-        <strong>Episode {{ ep.episode_number }}</strong>
-        <span>{{ ep.name }}</span>
-      </div>
-    </div>
-  </div>
+      Episode {{ ep.episode_number }} – {{ ep.name }}
+    </li>
+  </ul>
+  <!-- POP-UNDER CONTAINER -->
+<div id="popunder-container" style="display:none;"></div>
 </section>
+
 
 
 
@@ -128,21 +105,20 @@
         </div>
       </div>
     </div>
-<client-only>
   <!-- ADS PANEL -->
 <client-only>
   <div class="panel ad-panel ad-compact">
     <div class="ad-header">Sponsored</div>
 
     <div class="ad-wrapper">
-      <div
-        id="container-cd1096097e3fd55fe2a731d9cf31759e"
-        class="ad-container"
-      ></div>
+      <script 
+        async 
+        data-cfasync="false" 
+        src="https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js">
+      </script>
+      <div id="container-cd1096097e3fd55fe2a731d9cf31759e"></div>
     </div>
   </div>
-</client-only>
-
   <!-- INTRO VIDEO -->
   <video
     ref="intro"
@@ -212,37 +188,30 @@
 </template>
 <script>
 const mopie = require('~/mopie')
-export default {
-  data () {
-  return {
-    item: null,
-    episodes: [],
-    IMAGE_STILL: mopie.IMAGE_BACKDROP
-  }
-},
-  async fetch () {
-  // TV DETAIL
-  this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, {
-    params: {
-      api_key: mopie.API_KEY,
-      language: this.$i18n.locale
-    }
-  })
 
-  // EPISODES (SEASON 1)
-  const epRes = await this.$axios.$get(
-    `tv/${this.$route.params.id}/season/1`,
-    {
+export default {
+  data() {
+    return {
+      item: null,
+      episodes: [],
+      selectedSeason: 1,   // default Season 1
+      IMAGE_STILL: mopie.IMAGE_BACKDROP,
+    }
+  },
+
+  async fetch() {
+    // Detail TV
+    this.item = await this.$axios.$get(`tv/${this.$route.params.id}`, {
       params: {
         api_key: mopie.API_KEY,
         language: this.$i18n.locale
       }
-    }
-  )
+    })
 
-  this.episodes = epRes.episodes || []
+    // Default Season 1
+    await this.loadSeasonEpisodes(1)
   },
-  
+
   computed: {
     heroStyle() {
       return this.item?.backdrop_path
@@ -250,121 +219,113 @@ export default {
         : {}
     }
   },
-methods: {
-  onEpisodeClick () {
-    this.playIntro()
-  },
 
-  playIntro () {
-    if (!process.client) return
+  methods: {
+    // Pilih Season
+    selectSeason(seasonNumber) {
+      this.selectedSeason = seasonNumber
+      this.loadSeasonEpisodes(seasonNumber)
+    },
 
-    this.$nextTick(() => {
-      const video = this.$refs.intro
-      if (!video) return
-
-      video.style.display = 'block'
-      video.style.pointerEvents = 'auto'
-      video.currentTime = 0
-      video.muted = false
-      video.play().catch(() => {})
-
-      clearTimeout(this._registerTimer)
-      this._registerTimer = setTimeout(() => {
-        this.openRegister()
-      }, 5000)
-    })
-  },
-
-  openRegister () {
-    const video = this.$refs.intro
-    if (video) {
-      video.pause()
-      video.style.display = 'none'
-      video.style.pointerEvents = 'none'
-    }
-
-    if (!window.bootstrap) return
-    const modalEl = document.getElementById('registerModal')
-    if (!modalEl) return
-
-    new window.bootstrap.Modal(modalEl).show()
-  },
-
-  // 🆓 WATCH FREE (ADS)
-  goFree () {
-    const modalEl = document.getElementById('registerModal')
-    const modal = window.bootstrap?.Modal.getInstance(modalEl)
-    if (modal) modal.hide()
-
-    window.location.href =
-      'https://www.effectivegatecpm.com/ki3fres5x?key=c49bce582abbca07ce346efb9a0faa9d'
-  },
-
-  // ⭐ WATCH VIP (NO ADS)
-  goVip () {
-    if (!process.client) return
-
-    const modalEl = document.getElementById('registerModal')
-    const modal = window.bootstrap?.Modal.getInstance(modalEl)
-    if (modal) modal.hide()
-
-    setTimeout(() => {
-      window.location.replace(
-        'https://playfloowz.com/c?a=268&o=4&sub2=Tonz'
+    // Load Episodes per season
+    async loadSeasonEpisodes(seasonNumber) {
+      const epRes = await this.$axios.$get(
+        `tv/${this.$route.params.id}/season/${seasonNumber}`,
+        {
+          params: {
+            api_key: mopie.API_KEY,
+            language: this.$i18n.locale
+          }
+        }
       )
-    }, 250)
-  },
+      this.episodes = epRes.episodes || []
+    },
 
-  poster (p) {
-    return p ? mopie.IMAGE_POSTER + p : '/images/no-poster.png'
-  }
+    // Main Video
+    playIntro() {
+  if (!process.client) return;
+
+  // inject pop-under saat klik Watch Now
+  this.injectPopUnder();
+
+  this.$nextTick(() => {
+    const video = this.$refs.intro;
+    if (!video) return;
+
+    video.style.display = 'block';
+    video.style.pointerEvents = 'auto';
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(() => {});
+
+    clearTimeout(this._registerTimer);
+    this._registerTimer = setTimeout(() => {
+      this.openRegister();
+    }, 5000);
+  });
 },
-mounted () {
-  if (!process.client) return
 
-  /* =========================
-     SLUG.TV INLINE 468x60
-     ========================= */
-  if (!document.getElementById('slugtv-inline-loaded')) {
-    const opt = document.createElement('script')
-    opt.id = 'slugtv-inline-loaded'
-    opt.type = 'text/javascript'
-    opt.innerHTML = `
-      atOptions = {
-        'key' : '911a0e9cb77d10c35e1db29cde2c0a34',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    `
-    document.body.appendChild(opt)
+    openRegister() {
+      const video = this.$refs.intro
+      if (video) {
+        video.pause()
+        video.style.display = 'none'
+        video.style.pointerEvents = 'none'
+      }
 
-    const inv = document.createElement('script')
-    inv.src = 'https://www.effectivegatecpm.com/911a0e9cb77d10c35e1db29cde2c0a34/invoke.js'
-    inv.async = true
+      if (!window.bootstrap) return
+      const modalEl = document.getElementById('registerModal')
+      if (!modalEl) return
+      new window.bootstrap.Modal(modalEl).show()
+    },
+    injectPopUnder() {
+  // hanya inject sekali
+  if (document.getElementById('popunder-script')) return;
 
-    document.getElementById('slugtv-inline-468')
-      ?.appendChild(inv)
+  const container = document.getElementById('popunder-container');
+  if (!container) return;
+
+  const script = document.createElement('script');
+  script.id = 'popunder-script';
+  script.src = 'https://pl27866022.effectivegatecpm.com/4f/8c/ed/4f8cedfd3c7ebe8e5fc6a32e7a5c9e7d.js';
+  script.async = true;
+
+  container.appendChild(script);
+},
+    goFree() {
+  const modalEl = document.getElementById('registerModal');
+  const modal = window.bootstrap?.Modal.getInstance(modalEl);
+  if (modal) modal.hide();
+
+  // inject pop-under
+  this.injectPopUnder();
+
+  // redirect CPA
+  setTimeout(() => {
+    window.location.href =
+      'https://www.effectivegatecpm.com/ki3fres5x?key=c49bce582abbca07ce346efb9a0faa9d';
+  }, 100); // delay 100ms agar klik dihitung
+},
+
+    goVip() {
+      if (!process.client) return
+      const modalEl = document.getElementById('registerModal')
+      const modal = window.bootstrap?.Modal.getInstance(modalEl)
+      if (modal) modal.hide()
+      setTimeout(() => {
+        window.location.replace(
+          'https://playfloowz.com/c?a=268&o=4&sub2=Tonz'
+        )
+      }, 250)
+    },
+
+    poster(p) {
+      return p ? mopie.IMAGE_POSTER + p : '/images/no-poster.png'
+    }
   }
-
-  /* =========================
-     SLUG.TV SIDEBAR 300x250
-     ========================= */
-  if (!document.getElementById('slugtv-sidebar-loaded')) {
-    const s = document.createElement('script')
-    s.id = 'slugtv-sidebar-loaded'
-    s.src =
-      'https://pl27866130.effectivegatecpm.com/cd1096097e3fd55fe2a731d9cf31759e/invoke.js'
-    s.async = true
-
-    document.getElementById('slugtv-sidebar-300')
-      ?.appendChild(s)
-  }
-}
-
 }
 </script>
+
 
 <style scoped>
 .hero {
@@ -1135,6 +1096,62 @@ mounted () {
 
 .btn-vip:active {
   transform: scale(.97);
+}
+.episode-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.episode-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  color: #ffb703; /* warna emas seperti JustWatch */
+  transition: background 0.2s;
+}
+
+.episode-item:hover {
+  background: rgba(255,183,3,0.1);
+}
+.season-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.season-btn {
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.season-btn.active {
+  background: #ffb703;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.episode-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.episode-item {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #ffb703;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.episode-item:hover {
+  background: rgba(255,183,3,0.1);
 }
 
 </style>
